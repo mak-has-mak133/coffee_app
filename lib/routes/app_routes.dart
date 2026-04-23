@@ -12,6 +12,6 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get routes => {
     onboardingScreen: OnboardingScreen.builder,
     appNavigationScreen: AppNavigationScreen.builder,
-    initialRoute: AppNavigationScreen.builder,
+    initialRoute: OnboardingScreen.builder,
   };
 }

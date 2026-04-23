@@ -30,79 +30,95 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    // Get the total screen height to calculate proportions
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: appTheme.gray_50,
+      backgroundColor: Colors.black,
       body: Consumer<OnboardingProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
-            child: SizedBox(
-              width: double.infinity,
-              height: 768.h,
-              child: Stack(
-                alignment: Alignment.bottomCenter,
+            child: Container(
+              // Use minHeight so it takes at least the full screen but can grow if needed
+              constraints: BoxConstraints(minHeight: screenHeight),
+              child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(color: appTheme.white_A700),
-                      child: CustomImageView(
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      // 1. THE IMAGE
+                      CustomImageView(
                         imagePath: ImageConstant.imgImageCoffee6,
-                        height: 492.h,
+                        // Reduced to 50% height so the cup is much higher up
+                        height: screenHeight * 0.50,
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0x05050505), appTheme.black_900],
-                        stops: [0.0, 1.0],
+                      // 2. THE GRADIENT OVERLAY
+                      // This creates the smooth transition from image to black background
+                      Container(
+                        height: 100, // Just a fade at the bottom of the image
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black,
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    padding: EdgeInsets.all(24.h),
+                    ],
+                  ),
+
+                  // 3. THE CONTENT AREA (Now outside the stack to prevent overlap)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30.h, vertical: 20.h),
+                    color: Colors.black,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(height: 26.h),
+                        // Space between the "Image fade" and the text
+                        SizedBox(height: 10.h),
+
                         Text(
                           'Fall in Love with Coffee in Blissful Delight!',
                           textAlign: TextAlign.center,
-                          style: TextStyleHelper.instance.headline32SemiBoldSora
-                              .copyWith(height: 1.5),
+                          style: TextStyleHelper.instance.headline32SemiBoldSora.copyWith(
+                            height: 1.2,
+                            color: Colors.white,
+                          ),
                         ),
-                        SizedBox(height: 6.h),
+                        SizedBox(height: 12.h),
+
                         Text(
                           'Welcome to our cozy coffee corner, where every cup is a delightful for you.',
                           textAlign: TextAlign.center,
-                          style: TextStyleHelper.instance.body14RegularSora
-                              .copyWith(height: 1.5),
+                          style: TextStyleHelper.instance.body14RegularSora.copyWith(
+                            height: 1.5,
+                            color: Colors.grey[400],
+                          ),
                         ),
-                        SizedBox(height: 30.h),
+                        SizedBox(height: 36.h),
+
                         CustomButton(
                           text: 'Get Started',
                           width: double.infinity,
-                          height: 53.h,
+                          height: 60.h,
                           backgroundColor: appTheme.red_300,
-                          textColor: appTheme.white_A700,
+                          textColor: Colors.white,
                           borderRadius: 16.h,
-                          fontSize: 16.fSize,
+                          fontSize: 18.fSize,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Sora',
-                          padding: EdgeInsets.symmetric(
-                            vertical: 16.h,
-                            horizontal: 30.h,
-                          ),
                           onPressed: () {
                             provider.onGetStartedPressed(context);
                           },
                         ),
-                        SizedBox(height: 26.h),
+                        // Safe area for the bottom of the screen
+                        SizedBox(height: 40.h),
                       ],
                     ),
                   ),
