@@ -2,6 +2,10 @@ import 'package:coffe_app/assets_lib/images.dart';
 import 'package:coffe_app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import 'components/custom_button.dart';
+import 'components/on_board_image.dart';
+import 'components/on_boarding_content.dart';
+
 void main() {
   runApp(
     MaterialApp(
@@ -27,12 +31,19 @@ class MyApp extends StatelessWidget {
               // Qn1.what did you mean by  anchors the dark gradient to the bottom of the image.?
               alignment: Alignment.bottomCenter,
               children: [
-                Image.asset(
+                /*Image.asset(
                   Images.onBordingImage,
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.6,
                   fit: BoxFit.cover,
-                ),
+                )*/
+                Onboardimage(
+                    width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  fit:BoxFit.cover ,
+                  imagePath: Images.onBordingImage,
+              )
+              ,
                 Container(
                   height: 150,
                   width: double.infinity,
@@ -40,37 +51,26 @@ class MyApp extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              child: Column(
-                children: [
-                  Text(
-                    'Fall in Love with \nCoffee in Blissful \nDelight!',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Welcome to our cozy coffee corner, where \nevery cup is a delightful for you.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
+
+               OnboardingContent(),
+
                   const SizedBox(height: 32),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
+                    child: /*ElevatedButton(
                       onPressed: () {},
                       child: const Text('Get Started'),
-                    ),
+                    )*/
+                    CustomButton(
+                      onPressed: () {},
+                      text: ('Get Started'),
+
+                    )
+                    ,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
