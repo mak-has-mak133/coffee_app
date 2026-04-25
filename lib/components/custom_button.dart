@@ -12,7 +12,7 @@ const CustomButton({
 @override
 Widget build(BuildContext context) {
   return SizedBox(
-    width: double.infinity,
+    width: MediaQuery.of(context).size.width * 60,
     child: ElevatedButton(
       onPressed: onPressed,
       child: Text(text),

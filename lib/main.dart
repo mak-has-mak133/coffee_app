@@ -27,50 +27,46 @@ class MyApp extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              // Qn1.what did you mean by  anchors the dark gradient to the bottom of the image.?
-              alignment: Alignment.bottomCenter,
-              children: [
-                /*Image.asset(
-                  Images.onBordingImage,
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  fit: BoxFit.cover,
-                )*/
-                Onboardimage(
+            // Inside your Column...
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
+              ),
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Onboardimage(
                     width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  fit:BoxFit.cover ,
-                  imagePath: Images.onBordingImage,
-              )
-              ,
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration: AppTheme.onboardingFadeDecoration,
-                ),
-              ],
-            ),
-
-               OnboardingContent(),
-
-                  const SizedBox(height: 32),
-                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    fit: BoxFit.cover,
+                    imagePath: Images.onBordingImage,
+                  ),
+                  Container(
+                    height: 320,
                     width: double.infinity,
-                    child: /*ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Get Started'),
-                    )*/
-                    CustomButton(
-                      onPressed: () {},
-                      text: ('Get Started'),
-
-                    )
-                    ,
+                    decoration: AppTheme.onboardingFadeDecoration,
                   ),
                 ],
               ),
             ),
+
+            OnboardingContent(),
+
+            const SizedBox(height: 32),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.85,
+              child: /*ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Get Started'),
+                    )*/ CustomButton(
+                onPressed: () {},
+                text: ('Get Started'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

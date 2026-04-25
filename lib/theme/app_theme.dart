@@ -28,7 +28,7 @@ class AppTheme {
     style: ElevatedButton.styleFrom(
       backgroundColor: appColors.primary,
       foregroundColor: appColors.onPrimary,
-      minimumSize: Size(double.infinity, 60),
+      minimumSize: Size(150, 60),
       textStyle: appTexts.bodyMedium!.copyWith(
         letterSpacing: 0,
         fontWeight: FontWeight.w600,
@@ -37,11 +37,12 @@ class AppTheme {
     ),
   );
   static final BoxDecoration onboardingFadeDecoration = BoxDecoration(
+    borderRadius: BorderRadius.only(topLeft:Radius.circular(40),topRight: Radius.circular(40)),
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [appColors.surface.withValues(alpha: 0.0), appColors.surface],
-      stops: const [0.0, 0.8],
+      stops: const [0.0, 1],
     ),
   );
 
