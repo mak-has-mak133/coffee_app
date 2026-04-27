@@ -1,0 +1,477 @@
+import 'package:coffe_app/components/Shadow_Box.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../assets_lib/products/coffee_products.dart';
+import '../router/app_router/app_router.dart';
+import '../theme/app_theme.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const CoffeeHomeScreen();
+  }
+}
+
+class CoffeeHomeScreen extends StatefulWidget {
+  const CoffeeHomeScreen({super.key});
+
+  @override
+  State<CoffeeHomeScreen> createState() => _CoffeeHomeScreenState();
+}
+
+class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
+
+  int selectedCategoryIndex = 0;
+  int bottomNavIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ShadowBox(
+            height: 280, // Give it a clear boundary
+            begin: AlignmentGeometry.centerLeft,
+            end: AlignmentGeometry.centerRight,
+            colors: [AppTheme.homeGradientStart, AppTheme.homeGradientEnd],
+            stops: [0.0, 0.7],
+            width: double.infinity,
+          ),
+
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 16.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLocationHeader(),
+                        const SizedBox(height: 24),
+                        _buildSearchBar(),
+                        const SizedBox(height: 24),
+                        // THE BANNER
+                        _buildPromoBanner(),
+                      ],
+                    ),
+                  ),
+
+                  // Add a Spacer here so the categories start after the banner
+                  Container(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        _buildCategories(),
+                        const SizedBox(height: 24),
+                        _buildCoffeeGrid(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildLocationHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Location',
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            Text(
+              'Bilzen, Tanjungbalai',
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+            SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 52,
+            /*decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+            ),*/
+            child: TextField(
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              decoration: InputDecoration(
+                hintText: 'Search coffee',
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Container(
+          height: 52,
+          width: 52,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Icon(
+            Icons.tune,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPromoBanner() {
+    return Container(
+      width: double.infinity,
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        image: const DecorationImage(
+          image: NetworkImage(
+            'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop',
+          ),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Dark overlay to make text readable
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                colors: [Colors.black.withOpacity(0.8), Colors.transparent],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.error,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'Promo',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Buy one get\none FREE',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 28,
+                    height: 1.2,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategories() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          CoffeeProducts.categories.length,
+          (index) => GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedCategoryIndex = index;
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: selectedCategoryIndex == index
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                CoffeeProducts.categories[index],
+                style: TextStyle(
+                  color: selectedCategoryIndex == index
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: selectedCategoryIndex == index
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCoffeeGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.68, // Adjust the aspect ratio as needed
+      ),
+      itemCount: CoffeeProducts.coffeeProducts.length,
+      itemBuilder: (context, index) {
+        final coffee = CoffeeProducts.coffeeProducts[index];
+        return Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onSurface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                spreadRadius: 1,
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image and Rating Stack
+              Expanded(
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(coffee['image']),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surface.withValues(alpha: 0.6),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(16),
+                            topRight: Radius.circular(12),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${coffee['rating']}',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Coffee Details
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  coffee['name'],
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  coffee['subtitle'],
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Price and Add Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '\$ ${coffee['price']}',
+                      style: Theme.of(context).textTheme.headlineMedium!
+                          .copyWith(
+                            fontSize: 18,
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        size: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      height: 80,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildNavItem(Icons.home_filled, 0),
+          _buildNavItem(Icons.favorite_border, 1),
+          _buildNavItem(Icons.shopping_bag_outlined, 2),
+          _buildNavItem(Icons.notifications_none, 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, int index) {
+    bool isSelected = bottomNavIndex == index;
+    return GestureDetector(
+      onTap: () {
+        context.go(AppRoutes.onboarding.path);
+        setState(() {
+          bottomNavIndex = index;
+        });
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+            size: 28,
+          ),
+          const SizedBox(height: 4),
+          if (isSelected)
+            Container(
+              height: 5,
+              width: 15,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
