@@ -5,13 +5,16 @@ class AppTheme {
   static const homeGradientStart=Color.fromRGBO(49, 49, 49, 1);
   static const homeGradientEnd=Color.fromRGBO(17, 17, 17, 1);
   static const homeGradientStops=[0.0,1.0];
+  static const productIconBackground=Color.fromRGBO(249,249, 249, 1.0);
+  static const sizeBoarderColor=Color.fromRGBO(234, 234, 234, 1.0);
   static const ColorScheme appColors = ColorScheme.dark(
     brightness: Brightness.dark,
     onPrimary: Color.fromRGBO(255, 255, 255, 1),
     primary: Color.fromRGBO(198, 124, 78, 1),
-    surface: Color.fromRGBO(5, 5, 5, 1),
-    onSurface: Color.fromRGBO(255, 255, 255, 1),
+    onSurface: Color.fromRGBO(5, 5, 5, 1),
+    surface: Color.fromRGBO(255, 255, 255, 1),
     onSurfaceVariant: Color.fromRGBO(162, 162, 162, 1),
+    secondaryContainer: Color.fromRGBO(237, 237, 237, 0.35),
     error: Color.fromRGBO(237, 81, 81, 1)
   );
   static final TextTheme appTexts = TextTheme(

@@ -13,15 +13,15 @@ class CoffeeCard extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onSurface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+
+        /*boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
-        ],
+        ],*/
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

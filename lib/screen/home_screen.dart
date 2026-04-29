@@ -66,7 +66,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
 
                   // Add a Spacer here so the categories start after the banner
                   Container(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Colors.white,
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
@@ -346,6 +346,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+
         ],
       ),
     );
