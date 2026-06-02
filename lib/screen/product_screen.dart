@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
+
 import '../assets_lib/images.dart';
+import '../router/app_router/app_router.dart';
 import '../theme/app_theme.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -33,16 +37,20 @@ class _ProductScreenState extends State<ProductScreen> {
                     children: [
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.keyboard_arrow_left, color: colorScheme.onSurface),
-                      ),
-                       Text(
-                          'Detail',
-                          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                            color: colorScheme.onSurface,
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.center,
+                        icon: Icon(
+                          Icons.keyboard_arrow_left,
+                          color: colorScheme.onSurface,
                         ),
+                      ),
+                      Text(
+                        'Detail',
+                        style: Theme.of(context).textTheme.headlineMedium!
+                            .copyWith(
+                              color: colorScheme.onSurface,
+                              fontSize: 16,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
 
                       Icon(Icons.favorite_border, color: colorScheme.onSurface),
                     ],
@@ -72,38 +80,48 @@ class _ProductScreenState extends State<ProductScreen> {
                         children: [
                           Text(
                             'Caffe Mocha',
-                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                              fontSize: 20,
-                              color: colorScheme.onSurface,
-                            ),
+                            style: Theme.of(context).textTheme.headlineMedium!
+                                .copyWith(
+                                  fontSize: 20,
+                                  color: colorScheme.onSurface,
+                                ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Ice/Hot',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontSize: 12,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(
+                                  fontSize: 12,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(Icons.star, size: 20, color: colorScheme.primary),
+                              Icon(
+                                Icons.star,
+                                size: 20,
+                                color: colorScheme.primary,
+                              ),
                               const SizedBox(width: 8),
                               Text(
                                 '4.8',
-                                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                  fontSize: 16,
-                                  color: colorScheme.onSurface,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                      fontSize: 16,
+                                      color: colorScheme.onSurface,
+                                    ),
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 '(230)',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontSize: 16,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium!
+                                    .copyWith(
+                                      fontSize: 16,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
                               ),
                             ],
                           ),
@@ -113,11 +131,13 @@ class _ProductScreenState extends State<ProductScreen> {
                       // ICONS SECTION
                       Row(
                         children: [
-                          _buildServiceIcon(Icons.delivery_dining),
+                          _buildServiceIcon(
+                            HugeIcons.strokeRoundedDeliveredSent,
+                          ),
                           const SizedBox(width: 12),
-                          _buildServiceIcon(Icons.coffee),
+                          _buildServiceIcon(HugeIcons.strokeRoundedCoffee01),
                           const SizedBox(width: 12),
-                          _buildServiceIcon(Icons.whatshot),
+                          _buildServiceIcon(HugeIcons.strokeRoundedMotorbike01),
                         ],
                       ),
                     ],
@@ -134,27 +154,26 @@ class _ProductScreenState extends State<ProductScreen> {
                   children: [
                     Text(
                       'Description',
-                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontSize: 16,
-                        color: colorScheme.onSurface,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium!
+                          .copyWith(fontSize: 16, color: colorScheme.onSurface),
                     ),
                     const SizedBox(height: 4),
                     Text.rich(
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'A cappuccino is an approximately 150 ml (5 oz) beverage, with 25 ml of espresso coffee and 85ml of fresh milk the fo..',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
+                            text:
+                                'A cappuccino is an approximately 150 ml (5 oz) beverage, with 25 ml of espresso coffee and 85ml of fresh milk the fo..',
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(color: colorScheme.onSurfaceVariant),
                           ),
                           TextSpan(
                             text: ' Read More',
-                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                              color: colorScheme.primary,
-                              fontSize: 14,
-                            ),
+                            style: Theme.of(context).textTheme.headlineMedium!
+                                .copyWith(
+                                  color: colorScheme.primary,
+                                  fontSize: 14,
+                                ),
                           ),
                         ],
                       ),
@@ -168,10 +187,8 @@ class _ProductScreenState extends State<ProductScreen> {
                   children: [
                     Text(
                       'Size',
-                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontSize: 16,
-                        color: colorScheme.onSurface,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium!
+                          .copyWith(fontSize: 16, color: colorScheme.onSurface),
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -199,7 +216,9 @@ class _ProductScreenState extends State<ProductScreen> {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
               blurRadius: 30,
               offset: const Offset(0, -10),
             ),
@@ -231,7 +250,7 @@ class _ProductScreenState extends State<ProductScreen> {
               width: 217,
               height: 62,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => context.push(AppRoutes.order.path),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
                   shape: RoundedRectangleBorder(
@@ -254,7 +273,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   // HELPER FOR SERVICE ICONS
-  Widget _buildServiceIcon(IconData icon) {
+  Widget _buildServiceIcon(List<List<dynamic>> icon) {
     return Container(
       height: 44,
       width: 44,
@@ -262,7 +281,13 @@ class _ProductScreenState extends State<ProductScreen> {
         color: AppTheme.productIconBackground,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+      child: Center(
+        child: HugeIcon(
+          color: Theme.of(context).colorScheme.primary,
+          size: 20,
+          icon: icon,
+        ),
+      ),
     );
   }
 
@@ -283,10 +308,12 @@ class _ProductScreenState extends State<ProductScreen> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           // Logic: Apply Brown color if selected, otherwise keep background light
-          color: isSelected ? colorScheme.primary : Theme.of(context).colorScheme.surface,
+          color: isSelected
+              ? colorScheme.primary
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? colorScheme.primary :AppTheme.sizeBoarderColor,
+            color: isSelected ? colorScheme.primary : AppTheme.sizeBoarderColor,
             width: 1,
           ),
         ),

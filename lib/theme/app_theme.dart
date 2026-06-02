@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const homeGradientStart=Color.fromRGBO(49, 49, 49, 1);
-  static const homeGradientEnd=Color.fromRGBO(17, 17, 17, 1);
-  static const homeGradientStops=[0.0,1.0];
-  static const productIconBackground=Color.fromRGBO(249,249, 249, 1.0);
-  static const sizeBoarderColor=Color.fromRGBO(234, 234, 234, 1.0);
+  static const progressBarColor = Color.fromRGBO(54, 192, 126, 1.0);
+  static const homeGradientStart = Color.fromRGBO(49, 49, 49, 1);
+  static const homeGradientEnd = Color.fromRGBO(17, 17, 17, 1);
+  static const homeGradientStops = [0.0, 1.0];
+  static const productIconBackground = Color.fromRGBO(249, 249, 249, 1.0);
+  static const sizeBoarderColor = Color.fromRGBO(234, 234, 234, 1.0);
   static const ColorScheme appColors = ColorScheme.dark(
     brightness: Brightness.dark,
     onPrimary: Color.fromRGBO(255, 255, 255, 1),
@@ -15,7 +16,7 @@ class AppTheme {
     surface: Color.fromRGBO(255, 255, 255, 1),
     onSurfaceVariant: Color.fromRGBO(162, 162, 162, 1),
     secondaryContainer: Color.fromRGBO(237, 237, 237, 0.35),
-    error: Color.fromRGBO(237, 81, 81, 1)
+    error: Color.fromRGBO(237, 81, 81, 1),
   );
   static final TextTheme appTexts = TextTheme(
     headlineMedium: GoogleFonts.sora(
@@ -29,7 +30,6 @@ class AppTheme {
       fontSize: 14,
       height: 1.5,
       letterSpacing: 0.01,
-
     ),
   );
   static final ElevatedButtonThemeData elevatedButton = ElevatedButtonThemeData(

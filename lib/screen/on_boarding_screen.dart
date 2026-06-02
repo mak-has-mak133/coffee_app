@@ -19,10 +19,10 @@ class OnBoardingScreen extends StatelessWidget {
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.only(
+              /*borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40),
-              ),
+              ),*/
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [

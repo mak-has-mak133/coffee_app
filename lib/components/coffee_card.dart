@@ -1,19 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../assets_lib/products/coffee_products.dart';
-
 class CoffeeCard extends StatelessWidget {
-
   final Map<String, dynamic> coffee;
+
   const CoffeeCard({super.key, required this.coffee});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onSurface,
-
+        color: Theme.of(context).colorScheme.surface,
         /*boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -87,7 +84,7 @@ class CoffeeCard extends StatelessWidget {
               coffee['name'],
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 fontSize: 16,
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -113,7 +110,7 @@ class CoffeeCard extends StatelessWidget {
                   '\$ ${coffee['price']}',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     fontSize: 18,
-                    color: Theme.of(context).colorScheme.surface,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 Container(

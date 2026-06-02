@@ -24,9 +24,9 @@ class CoffeeHomeScreen extends StatefulWidget {
 }
 
 class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
-
   int selectedCategoryIndex = 0;
   int bottomNavIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +34,8 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
         clipBehavior: Clip.none,
         children: [
           ShadowBox(
-            height: 280, // Give it a clear boundary
+            height: 280,
+            // Give it a clear boundary
             begin: AlignmentGeometry.centerLeft,
             end: AlignmentGeometry.centerRight,
             colors: [AppTheme.homeGradientStart, AppTheme.homeGradientEnd],
@@ -66,7 +67,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
 
                   // Add a Spacer here so the categories start after the banner
                   Container(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
@@ -250,7 +251,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               decoration: BoxDecoration(
                 color: selectedCategoryIndex == index
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface,
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -258,7 +259,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                 style: TextStyle(
                   color: selectedCategoryIndex == index
                       ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                      : Theme.of(context).colorScheme.onSurface,
                   fontWeight: selectedCategoryIndex == index
                       ? FontWeight.bold
                       : FontWeight.normal,
@@ -284,7 +285,10 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
       itemCount: CoffeeProducts.coffeeProducts.length,
       itemBuilder: (context, index) {
         final coffee = CoffeeProducts.coffeeProducts[index];
-        return CoffeeCard( coffee: CoffeeProducts.coffeeProducts[index],);
+        return GestureDetector(
+          onTap: () => context.push(AppRoutes.product.path),
+          child: CoffeeCard(coffee: CoffeeProducts.coffeeProducts[index]),
+        );
       },
     );
   }
@@ -346,7 +350,6 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-
         ],
       ),
     );
