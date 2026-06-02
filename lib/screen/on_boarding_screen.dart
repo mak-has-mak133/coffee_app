@@ -14,15 +14,15 @@ class OnBoardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.onSurface,
       body: SingleChildScrollView(
         child: Column(
           children: [
             ClipRRect(
-              /*borderRadius: const BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40),
-              ),*/
+              ),
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
@@ -36,8 +36,8 @@ class OnBoardingScreen extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Theme.of(context).colorScheme.surface.withAlpha(0),
-                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context).colorScheme.onSurface.withAlpha(0),
+                      Theme.of(context).colorScheme.onSurface,
                     ],
                     stops: [0.2, 0.8],
                     width: double.infinity,
@@ -57,7 +57,7 @@ class OnBoardingScreen extends StatelessWidget {
                   context.go(AppRoutes.home.path);
                 },
                 text: 'Get Started',
-                width: MediaQuery.of(context).size.width * 60,
+                width: MediaQuery.of(context).size.width * 0.9  ,
               ),
             ),
             SizedBox(height: 40),

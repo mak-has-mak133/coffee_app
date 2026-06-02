@@ -97,7 +97,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
           'Location',
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
             fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
         const SizedBox(height: 4),
@@ -219,7 +219,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                 Text(
                   'Buy one get\none FREE',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Theme.of(context).colorScheme.surface,
                     fontSize: 28,
                     height: 1.2,
                     fontWeight: FontWeight.w800,
@@ -251,7 +251,8 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               decoration: BoxDecoration(
                 color: selectedCategoryIndex == index
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
+                    : Theme.of(context).colorScheme.onSurfaceVariant.withValues(
+                    alpha:0.1 ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

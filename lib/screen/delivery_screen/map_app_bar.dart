@@ -10,7 +10,14 @@ class MapAppBar extends StatelessWidget {
       height: 44,
       child: Row(
         children: [
-          IconButton.outlined(
+          IconButton(
+            style: IconButton.styleFrom(
+              // Using onSurfaceVariant as background
+              backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.2),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             onPressed: () => context.pop(),
             icon: Icon(
               Icons.keyboard_arrow_left,
@@ -18,8 +25,14 @@ class MapAppBar extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          Spacer(),
-          IconButton.outlined(
+          const Spacer(),
+          IconButton(
+            style: IconButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.2),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             onPressed: () {},
             icon: Icon(
               Icons.location_searching,

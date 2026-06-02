@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';class OnboardingContent extends Stateless
           Text(
             'Fall in Love with \nCoffee in Blissful \nDelight!',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of
+              (context).colorScheme.onPrimary)
           ),
           const SizedBox(height: 12),
           Text(

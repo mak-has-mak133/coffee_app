@@ -27,7 +27,7 @@ class PaymentSummarySection extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                  ).colorScheme.onSurface,
                   fontSize: 14,
                 ),
               ),
@@ -51,7 +51,7 @@ class PaymentSummarySection extends StatelessWidget {
                   fontSize: 14,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                  ).colorScheme.onSurface,
                 ),
               ),
               Spacer(),

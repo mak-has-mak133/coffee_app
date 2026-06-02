@@ -309,7 +309,7 @@ class _ProductScreenState extends State<ProductScreen> {
         decoration: BoxDecoration(
           // Logic: Apply Brown color if selected, otherwise keep background light
           color: isSelected
-              ? colorScheme.primary
+              ? colorScheme.primary.withValues(alpha: 0.05)
               : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
@@ -322,7 +322,7 @@ class _ProductScreenState extends State<ProductScreen> {
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
             fontSize: 14,
             // Logic: White text if selected, Black text if not
-            color: isSelected ? colorScheme.surface : colorScheme.onSurface,
+            color: isSelected ? colorScheme.primary : colorScheme.onSurface,
           ),
         ),
       ),
