@@ -48,10 +48,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 16.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -101,23 +98,82 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
           ),
         ),
         const SizedBox(height: 4),
-        Row(
-          children: [
-            Text(
-              'Bilzen, Tanjungbalai',
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontSize: 14,
+        GestureDetector(
+          onTap: () => _showLocationPicker(),
+          behavior: HitTestBehavior.opaque,
+          child: Row(
+            children: [
+              Text(
+                'Bilzen, Tanjungbalai',
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+              SizedBox(width: 4),
+              Icon(
+                Icons.keyboard_arrow_down,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
-            ),
-            SizedBox(width: 4),
-            Icon(
-              Icons.keyboard_arrow_down,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-          ],
+            ],
+          ),
         ),
       ],
+    );
+  }
+
+  void _showLocationPicker() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Select Location',
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search location',
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      // You can add more location selection UI here
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Search',
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -156,10 +212,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
             color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Icon(
-            Icons.tune,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
+          child: Icon(Icons.tune, color: Theme.of(context).colorScheme.onPrimary),
         ),
       ],
     );
@@ -198,10 +251,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.error,
                     borderRadius: BorderRadius.circular(8),
@@ -251,8 +301,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               decoration: BoxDecoration(
                 color: selectedCategoryIndex == index
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurfaceVariant.withValues(
-                    alpha:0.1 ),
+                    : Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
