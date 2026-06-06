@@ -3,23 +3,33 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../assets_lib/images.dart';
+import '../data/favorites_manager.dart';
 import '../router/app_router/app_router.dart';
 import '../theme/app_theme.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  final Map<String, dynamic>? coffee;
+  const ProductScreen({super.key, this.coffee});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  // Logic: Track the selected size
   String selectedSize = 'M';
+  final favoritesManager = FavoritesManager();
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final coffee = widget.coffee ?? {
+      'name': 'Caffe Mocha',
+      'subtitle': 'Ice/Hot',
+      'rating': 4.8,
+      'reviews': 230,
+      'price': 4.53,
+      'image': Images.productImage,
+    };
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -36,7 +46,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () => context.pop(),
                         icon: Icon(
                           Icons.keyboard_arrow_left,
                           color: colorScheme.onSurface,
@@ -51,8 +61,23 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
                         textAlign: TextAlign.center,
                       ),
-
-                      Icon(Icons.favorite_border, color: colorScheme.onSurface),
+                      ValueListenableBuilder<Set<String>>(
+                        valueListenable: favoritesManager.favoriteIds,
+                        builder: (context, favorites, child) {
+                          final isLiked = favorites.contains(coffee['name']);
+                          return IconButton(
+                            onPressed: () {
+                              favoritesManager.toggleFavorite(coffee['name']);
+                            },
+                            icon: Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_border,
+                              color: isLiked 
+                                  ? Theme.of(context).colorScheme.primary 
+                                  : colorScheme.onSurface,
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -63,7 +88,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(Images.productImage),
+                      image: coffee['image'] is String && (coffee['image'] as String).startsWith('http') 
+                        ? NetworkImage(coffee['image']) 
+                        : AssetImage(coffee['image'] ?? Images.productImage) as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(16),
@@ -79,7 +106,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Caffe Mocha',
+                            coffee['name'],
                             style: Theme.of(context).textTheme.headlineMedium!
                                 .copyWith(
                                   fontSize: 20,
@@ -88,7 +115,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Ice/Hot',
+                            coffee['subtitle'],
                             style: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   fontSize: 12,
@@ -105,7 +132,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                '4.8',
+                                '${coffee['rating']}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!
@@ -116,7 +143,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                '(230)',
+                                '(${coffee['reviews'] ?? 230})',
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
                                       fontSize: 16,
@@ -238,7 +265,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
                 Text(
-                  '\$ 4.53',
+                  '\$ ${coffee['price']}',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     fontSize: 18,
                     color: colorScheme.primary,
@@ -272,7 +299,6 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  // HELPER FOR SERVICE ICONS
   Widget _buildServiceIcon(List<List<dynamic>> icon) {
     return Container(
       height: 44,
@@ -291,7 +317,6 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  // HELPER FOR SIZE SELECTION LOGIC
   Widget _buildSizeOption(String size) {
     bool isSelected = selectedSize == size;
     final colorScheme = Theme.of(context).colorScheme;
@@ -307,7 +332,6 @@ class _ProductScreenState extends State<ProductScreen> {
         width: 96,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          // Logic: Apply Brown color if selected, otherwise keep background light
           color: isSelected
               ? colorScheme.primary.withValues(alpha: 0.05)
               : Theme.of(context).colorScheme.surface,
@@ -321,7 +345,6 @@ class _ProductScreenState extends State<ProductScreen> {
           size,
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
             fontSize: 14,
-            // Logic: White text if selected, Black text if not
             color: isSelected ? colorScheme.primary : colorScheme.onSurface,
           ),
         ),

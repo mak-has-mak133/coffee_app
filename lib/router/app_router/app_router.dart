@@ -40,8 +40,10 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.product.path,
-
-        builder: (context, state) => const ProductScreen(),
+        builder: (context, state) {
+          final coffee = state.extra as Map<String, dynamic>?;
+          return ProductScreen(coffee: coffee);
+        },
       ),
       GoRoute(
         path: AppRoutes.order.path,

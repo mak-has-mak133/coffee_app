@@ -57,7 +57,7 @@ class OnBoardingScreen extends StatelessWidget {
                   context.go(AppRoutes.home.path);
                 },
                 text: 'Get Started',
-                width: MediaQuery.of(context).size.width * 0.9  ,
+                width: MediaQuery.of(context).size.width * 0.9,
               ),
             ),
             SizedBox(height: 40),

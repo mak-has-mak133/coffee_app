@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class CoffeeCard extends StatelessWidget {
   final Map<String, dynamic> coffee;
+  final bool isFavorite;
+  final VoidCallback? onFavoriteToggle;
 
-  const CoffeeCard({super.key, required this.coffee});
+  const CoffeeCard({
+    super.key,
+    required this.coffee,
+    this.isFavorite = false,
+    this.onFavoriteToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,14 +18,7 @@ class CoffeeCard extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        /*boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],*/
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,6 +36,7 @@ class CoffeeCard extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Rating
                 Positioned(
                   top: 0,
                   right: 0,
@@ -45,9 +46,7 @@ class CoffeeCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.6),
+                      color: Colors.black.withOpacity(0.5),
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(16),
                         topRight: Radius.circular(12),
@@ -63,13 +62,35 @@ class CoffeeCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           '${coffee['rating']}',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                          style: const TextStyle(
+                            color: Colors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                ),
+                // Favorite Button
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: GestureDetector(
+                    onTap: onFavoriteToggle,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite 
+                            ? Theme.of(context).colorScheme.primary 
+                            : Colors.white,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ),

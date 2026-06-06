@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../assets_lib/products/coffee_products.dart';
 import '../components/coffee_card.dart';
+import '../components/location_search_modal.dart';
+import '../data/favorites_manager.dart';
 import '../router/app_router/app_router.dart';
 import '../theme/app_theme.dart';
 
@@ -26,63 +28,145 @@ class CoffeeHomeScreen extends StatefulWidget {
 class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
   int selectedCategoryIndex = 0;
   int bottomNavIndex = 0;
+  String currentLocation = 'Bilzen, Tanjungbalai';
+  final favoritesManager = FavoritesManager();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          ShadowBox(
-            height: 280,
-            // Give it a clear boundary
-            begin: AlignmentGeometry.centerLeft,
-            end: AlignmentGeometry.centerRight,
-            colors: [AppTheme.homeGradientStart, AppTheme.homeGradientEnd],
-            stops: [0.0, 0.7],
-            width: double.infinity,
-          ),
-
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLocationHeader(),
-                        const SizedBox(height: 24),
-                        _buildSearchBar(),
-                        const SizedBox(height: 24),
-                        // THE BANNER
-                        _buildPromoBanner(),
-                      ],
-                    ),
-                  ),
-
-                  // Add a Spacer here so the categories start after the banner
-                  Container(
-                    color: Theme.of(context).colorScheme.surface,
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        _buildCategories(),
-                        const SizedBox(height: 24),
-                        _buildCoffeeGrid(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+      body: ValueListenableBuilder<Set<String>>(
+        valueListenable: favoritesManager.favoriteIds,
+        builder: (context, favorites, child) {
+          return bottomNavIndex == 1
+              ? _buildFavoritesContent(favorites)
+              : _buildHomeContent(favorites);
+        },
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildHomeContent(Set<String> favorites) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        ShadowBox(
+          height: 280,
+          begin: AlignmentGeometry.centerLeft,
+          end: AlignmentGeometry.centerRight,
+
+          colors: [AppTheme.homeGradientStart, AppTheme.homeGradientEnd],
+          // colors: [Colors.blue, Colors.red],
+          stops: [0.0, 0.7],
+          width: double.infinity,
+        ),
+        SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLocationHeader(),
+                      const SizedBox(height: 24),
+                      _buildSearchBar(),
+                      const SizedBox(height: 24),
+                      _buildPromoBanner(),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: Theme.of(context).colorScheme.surface,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 8),
+                      _buildCategories(),
+                      const SizedBox(height: 24),
+                      _buildCoffeeGrid(favorites),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFavoritesContent(Set<String> favorites) {
+    final favoriteProducts = CoffeeProducts.coffeeProducts
+        .where((coffee) => favorites.contains(coffee['name']))
+        .toList();
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Text(
+              'Favorites',
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: favoriteProducts.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.favorite_border,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No favorites yet',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.68,
+                      ),
+                      itemCount: favoriteProducts.length,
+                      itemBuilder: (context, index) {
+                        final coffee = favoriteProducts[index];
+                        return GestureDetector(
+                          onTap: () =>
+                              context.push(AppRoutes.product.path, extra: coffee),
+                          child: CoffeeCard(
+                            coffee: coffee,
+                            isFavorite: true,
+                            onFavoriteToggle: () {
+                              favoritesManager.toggleFavorite(coffee['name']);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -104,13 +188,13 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
           child: Row(
             children: [
               Text(
-                'Bilzen, Tanjungbalai',
+                currentLocation,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Icon(
                 Icons.keyboard_arrow_down,
                 color: Theme.of(context).colorScheme.onPrimary,
@@ -126,52 +210,14 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.75,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Select Location',
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  fontSize: 18,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search location',
-                        hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      // You can add more location selection UI here
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Search',
-                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        return LocationSearchModal(
+          onLocationSelected: (locationName, latLng) {
+            setState(() {
+              currentLocation = locationName;
+            });
+          },
         );
       },
     );
@@ -181,12 +227,8 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
     return Row(
       children: [
         Expanded(
-          child: Container(
+          child: SizedBox(
             height: 52,
-            /*decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-            ),*/
             child: TextField(
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
               decoration: InputDecoration(
@@ -221,7 +263,6 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
   Widget _buildPromoBanner() {
     return Container(
       width: double.infinity,
-
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: const DecorationImage(
@@ -233,12 +274,11 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
       ),
       child: Stack(
         children: [
-          // Dark overlay to make text readable
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
-                colors: [Colors.black.withOpacity(0.8), Colors.transparent],
+                colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -324,7 +364,14 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
     );
   }
 
-  Widget _buildCoffeeGrid() {
+  Widget _buildCoffeeGrid(Set<String> favorites) {
+    final selectedCategory = CoffeeProducts.categories[selectedCategoryIndex];
+    final filteredProducts = selectedCategory == 'All Coffee'
+        ? CoffeeProducts.coffeeProducts
+        : CoffeeProducts.coffeeProducts
+              .where((p) => p['category'] == selectedCategory)
+              .toList();
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -332,14 +379,20 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.68, // Adjust the aspect ratio as needed
+        childAspectRatio: 0.68,
       ),
-      itemCount: CoffeeProducts.coffeeProducts.length,
+      itemCount: filteredProducts.length,
       itemBuilder: (context, index) {
-        final coffee = CoffeeProducts.coffeeProducts[index];
+        final coffee = filteredProducts[index];
         return GestureDetector(
-          onTap: () => context.push(AppRoutes.product.path),
-          child: CoffeeCard(coffee: CoffeeProducts.coffeeProducts[index]),
+          onTap: () => context.push(AppRoutes.product.path, extra: coffee),
+          child: CoffeeCard(
+            coffee: coffee,
+            isFavorite: favorites.contains(coffee['name']),
+            onFavoriteToggle: () {
+              favoritesManager.toggleFavorite(coffee['name']);
+            },
+          ),
         );
       },
     );
@@ -354,7 +407,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, -2),
@@ -377,7 +430,6 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
     bool isSelected = bottomNavIndex == index;
     return GestureDetector(
       onTap: () {
-        context.go(AppRoutes.onboarding.path);
         setState(() {
           bottomNavIndex = index;
         });

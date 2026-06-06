@@ -11,8 +11,15 @@ import 'discount_section.dart';
 import 'order_header_section.dart';
 import 'order_tabs.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
+
+  @override
+  State<OrderScreen> createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  int selectedTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +27,30 @@ class OrderScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 30, right: 30, top: 30),
+          padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
           child: Column(
             children: [
-              OrderHeaderSection(),
-              SizedBox(height: 24),
-              OrderTabs(),
-              SizedBox(height: 24),
-              AddressSection(),
-              Divider(
-                height: 30,
-                color: Theme.of(
-                  context,
-                ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                thickness: 1,
+              const OrderHeaderSection(),
+              const SizedBox(height: 24),
+              OrderTabs(
+                selectedIndex: selectedTabIndex,
+                onChanged: (index) {
+                  setState(() {
+                    selectedTabIndex = index;
+                  });
+                },
               ),
+              const SizedBox(height: 24),
+              if (selectedTabIndex == 0) ...[
+                const AddressSection(),
+                Divider(
+                  height: 30,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                  thickness: 1,
+                ),
+              ],
               ProductSection(),
               Divider(
                 height: 50,
