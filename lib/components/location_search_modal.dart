@@ -18,7 +18,7 @@ class LocationSearchModal extends StatefulWidget {
 class _LocationSearchModalState extends State<LocationSearchModal> {
   final TextEditingController _controller = TextEditingController();
 
-  final String _apiKey = "AIzaSyC5HVloQvTIlkXawfGsM5xY4I7psY0ug9I";
+  final String _apiKey = "AIzaSyDJeuyB95W1Ndk9uX4u615MEBNhCyxU6OM";
 
   List<dynamic> _predictions = [];
   Timer? _debounce;
@@ -193,3 +193,5 @@ class _LocationSearchModalState extends State<LocationSearchModal> {
     );
   }
 }
+
+// "You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started"

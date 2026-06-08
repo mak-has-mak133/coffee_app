@@ -10,7 +10,7 @@
         android:label="coffe_app">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCBEWok8Wzc922a_KARTlWXlgDKB2qcwVM" />
+            android:value="AIzaSyDJeuyB95W1Ndk9uX4u615MEBNhCyxU6OM" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

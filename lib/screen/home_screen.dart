@@ -30,6 +30,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
   int bottomNavIndex = 0;
   String currentLocation = 'Bilzen, Tanjungbalai';
   final favoritesManager = FavoritesManager();
+  String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -290,6 +291,11 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
           child: SizedBox(
             height: 52,
             child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
               decoration: InputDecoration(
                 hintText: 'Search coffee',
@@ -417,9 +423,21 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
 
   Widget _buildCoffeeGrid(Set<String> favorites) {
     final selectedCategory = CoffeeProducts.categories[selectedCategoryIndex];
-    final filteredProducts = selectedCategory == 'All Coffee'
-        ? CoffeeProducts.coffeeProducts
-        : CoffeeProducts.coffeeProducts.where((p) => p['category'] == selectedCategory).toList();
+    final filteredProducts = CoffeeProducts.coffeeProducts.where((p) {
+      final matchesCategory = selectedCategory == 'All Coffee' || p['category'] == selectedCategory;
+      final matchesSearch = p['name'].toString().toLowerCase().contains(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    }).toList();
+
+    if (filteredProducts.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: _buildEmptyStateUI(
+          icon: Icons.search_off,
+          message: 'No coffee found',
+        ),
+      );
+    }
 
     return GridView.builder(
       shrinkWrap: true,
