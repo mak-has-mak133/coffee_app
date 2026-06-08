@@ -34,12 +34,20 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: ValueListenableBuilder<Set<String>>(
         valueListenable: favoritesManager.favoriteIds,
         builder: (context, favorites, child) {
-          return bottomNavIndex == 1
-              ? _buildFavoritesContent(favorites)
-              : _buildHomeContent(favorites);
+          switch (bottomNavIndex) {
+            case 1:
+              return _buildFavoritesContent(favorites);
+            case 2:
+              return _buildCartContent();
+            case 3:
+              return _buildNotificationsContent();
+            default:
+              return _buildHomeContent(favorites);
+          }
         },
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -54,10 +62,8 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
           height: 280,
           begin: AlignmentGeometry.centerLeft,
           end: AlignmentGeometry.centerRight,
-
           colors: [AppTheme.homeGradientStart, AppTheme.homeGradientEnd],
-          // colors: [Colors.blue, Colors.red],
-          stops: [0.0, 0.7],
+          stops: const [0.0, 0.7],
           width: double.infinity,
         ),
         SafeArea(
@@ -80,6 +86,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                 Container(
                   color: Theme.of(context).colorScheme.surface,
                   width: double.infinity,
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height - 400,
+                  ),
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Column(
                     children: [
@@ -113,32 +122,16 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
             Text(
               'Favorites',
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontSize: 24,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
             const SizedBox(height: 16),
             Expanded(
               child: favoriteProducts.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.favorite_border,
-                            size: 64,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No favorites yet',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
+                  ? _buildEmptyStateUI(
+                      icon: Icons.favorite_border,
+                      message: 'No favorites yet',
                     )
                   : GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -151,8 +144,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                       itemBuilder: (context, index) {
                         final coffee = favoriteProducts[index];
                         return GestureDetector(
-                          onTap: () =>
-                              context.push(AppRoutes.product.path, extra: coffee),
+                          onTap: () => context.push(AppRoutes.product.path, extra: coffee),
                           child: CoffeeCard(
                             coffee: coffee,
                             isFavorite: true,
@@ -170,6 +162,74 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
     );
   }
 
+  Widget _buildCartContent() {
+    return _buildEmptyState(
+      title: 'Cart',
+      message: 'Your cart is empty',
+      icon: Icons.shopping_bag_outlined,
+    );
+  }
+
+  Widget _buildNotificationsContent() {
+    return _buildEmptyState(
+      title: 'Notifications',
+      message: 'No notifications yet',
+      icon: Icons.notifications_none,
+    );
+  }
+
+  Widget _buildEmptyState({
+    required String title,
+    required String message,
+    required IconData icon,
+  }) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _buildEmptyStateUI(icon: icon, message: message),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyStateUI({required IconData icon, required String message}) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 64,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildLocationHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,9 +237,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
         Text(
           'Location',
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-            fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ),
         const SizedBox(height: 4),
         GestureDetector(
@@ -190,9 +250,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               Text(
                 currentLocation,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
               ),
               const SizedBox(width: 4),
               Icon(
@@ -262,6 +322,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
 
   Widget _buildPromoBanner() {
     return Container(
+      constraints: const BoxConstraints(minHeight: 140),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -272,53 +333,47 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
           fit: BoxFit.cover,
         ),
       ),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.error,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                'Promo',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.error,
-                    borderRadius: BorderRadius.circular(8),
+            const SizedBox(height: 8),
+            Text(
+              'Buy one get\none FREE',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.surface,
+                fontSize: 28,
+                height: 1.1,
+                fontWeight: FontWeight.w800,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    offset: const Offset(1, 1),
+                    blurRadius: 4,
                   ),
-                  child: Text(
-                    'Promo',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Buy one get\none FREE',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.surface,
-                    fontSize: 28,
-                    height: 1.2,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -341,9 +396,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               decoration: BoxDecoration(
                 color: selectedCategoryIndex == index
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(
-                        context,
-                      ).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
+                    : Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -352,9 +405,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                   color: selectedCategoryIndex == index
                       ? Theme.of(context).colorScheme.onPrimary
                       : Theme.of(context).colorScheme.onSurface,
-                  fontWeight: selectedCategoryIndex == index
-                      ? FontWeight.bold
-                      : FontWeight.normal,
+                  fontWeight: selectedCategoryIndex == index ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
             ),
@@ -368,9 +419,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
     final selectedCategory = CoffeeProducts.categories[selectedCategoryIndex];
     final filteredProducts = selectedCategory == 'All Coffee'
         ? CoffeeProducts.coffeeProducts
-        : CoffeeProducts.coffeeProducts
-              .where((p) => p['category'] == selectedCategory)
-              .toList();
+        : CoffeeProducts.coffeeProducts.where((p) => p['category'] == selectedCategory).toList();
 
     return GridView.builder(
       shrinkWrap: true,

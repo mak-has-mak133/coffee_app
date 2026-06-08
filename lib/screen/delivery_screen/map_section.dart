@@ -15,8 +15,9 @@ class _MapSectionState extends State<MapSection> {
   final Completer<GoogleMapController> _controller = Completer();
 
   static const CameraPosition _kGoogle = CameraPosition(
-    target: LatLng(-6.8227, 39.291),
-    zoom: 14.4746,
+    target: LatLng(-6.795344, 39.140266), //-6.795344, 39.140266
+
+    zoom: 11,
   );
 
   @override
@@ -39,7 +40,7 @@ class _MapSectionState extends State<MapSection> {
               markers: {
                 const Marker(
                   markerId: MarkerId('delivery_location'),
-                  position: LatLng(-6.8227, 39.291),
+                  position: LatLng(-6.795344, 39.140266),
                   infoWindow: InfoWindow(
                     title: 'Coffee Delivery',
                     snippet: 'Your order is on the way!',
