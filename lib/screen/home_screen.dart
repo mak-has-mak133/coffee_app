@@ -123,9 +123,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
             Text(
               'Favorites',
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    fontSize: 24,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
             const SizedBox(height: 16),
             Expanded(
@@ -145,7 +145,8 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                       itemBuilder: (context, index) {
                         final coffee = favoriteProducts[index];
                         return GestureDetector(
-                          onTap: () => context.push(AppRoutes.product.path, extra: coffee),
+                          onTap: () =>
+                              context.push(AppRoutes.product.path, extra: coffee),
                           child: CoffeeCard(
                             coffee: coffee,
                             isFavorite: true,
@@ -194,9 +195,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
             Text(
               title,
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    fontSize: 24,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
             const SizedBox(height: 16),
             Expanded(
@@ -213,11 +214,7 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 64,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+          Icon(icon, size: 64, color: Theme.of(context).colorScheme.onSurfaceVariant),
           const SizedBox(height: 16),
           Text(
             message,
@@ -238,9 +235,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
         Text(
           'Location',
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 4),
         GestureDetector(
@@ -251,9 +248,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               Text(
                 currentLocation,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
               const SizedBox(width: 4),
               Icon(
@@ -296,12 +293,10 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                   searchQuery = value;
                 });
               },
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               decoration: InputDecoration(
                 hintText: 'Search coffee',
-                hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                 prefixIcon: Icon(
                   Icons.search,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -402,7 +397,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
               decoration: BoxDecoration(
                 color: selectedCategoryIndex == index
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
+                    : Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -411,7 +408,9 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
                   color: selectedCategoryIndex == index
                       ? Theme.of(context).colorScheme.onPrimary
                       : Theme.of(context).colorScheme.onSurface,
-                  fontWeight: selectedCategoryIndex == index ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: selectedCategoryIndex == index
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                 ),
               ),
             ),
@@ -424,18 +423,18 @@ class _CoffeeHomeScreenState extends State<CoffeeHomeScreen> {
   Widget _buildCoffeeGrid(Set<String> favorites) {
     final selectedCategory = CoffeeProducts.categories[selectedCategoryIndex];
     final filteredProducts = CoffeeProducts.coffeeProducts.where((p) {
-      final matchesCategory = selectedCategory == 'All Coffee' || p['category'] == selectedCategory;
-      final matchesSearch = p['name'].toString().toLowerCase().contains(searchQuery.toLowerCase());
+      final matchesCategory =
+          selectedCategory == 'All Coffee' || p['category'] == selectedCategory;
+      final matchesSearch = p['name'].toString().toLowerCase().contains(
+        searchQuery.toLowerCase(),
+      );
       return matchesCategory && matchesSearch;
     }).toList();
 
     if (filteredProducts.isEmpty) {
       return Padding(
         padding: const EdgeInsets.only(top: 40),
-        child: _buildEmptyStateUI(
-          icon: Icons.search_off,
-          message: 'No coffee found',
-        ),
+        child: _buildEmptyStateUI(icon: Icons.search_off, message: 'No coffee found'),
       );
     }
 

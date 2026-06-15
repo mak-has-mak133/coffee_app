@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
 
 class LocationSearchModal extends StatefulWidget {
   final Function(String, LatLng) onLocationSelected;
@@ -18,18 +17,15 @@ class LocationSearchModal extends StatefulWidget {
 class _LocationSearchModalState extends State<LocationSearchModal> {
   final TextEditingController _controller = TextEditingController();
 
-  final String _apiKey = "AIzaSyDJeuyB95W1Ndk9uX4u615MEBNhCyxU6OM";
+  final String _mapboxToken =
+      "pk.eyJ1IjoibWFrZGV2IiwiYSI6ImNtcTl0enY1czAwejkycXM5MTVheG1pZmMifQ.arx7M1XronOzoK2ZYyWV0A";
 
   List<dynamic> _predictions = [];
   Timer? _debounce;
 
-  final _uuid = const Uuid();
-  String? _sessionToken;
-
   @override
   void initState() {
     super.initState();
-    _sessionToken = _uuid.v4();
   }
 
   @override
@@ -55,41 +51,23 @@ class _LocationSearchModalState extends State<LocationSearchModal> {
 
   Future<void> _fetchPredictions(String input) async {
     final url =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-        '?input=$input'
-        '&key=$_apiKey'
-        '&sessiontoken=$_sessionToken'
-        '&components=country:tz';
+        'https://api.mapbox.com/geocoding/v5/mapbox.places/${Uri.encodeComponent(input)}.json'
+        '?access_token=$_mapboxToken'
+        '&autocomplete=true'
+        '&limit=5';
 
     try {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-
-        if (data['status'] == 'OK') {
-          setState(() {
-            _predictions = data['predictions'];
-          });
-        }
+        setState(() {
+          _predictions = data['features'];
+        });
       }
     } catch (e) {
       debugPrint('Error: $e');
     }
-  }
-
-  Future<LatLng> _getLatLngFromPlaceId(String placeId) async {
-    final url =
-        "https://maps.googleapis.com/maps/api/place/details/json"
-        "?place_id=$placeId"
-        "&key=$_apiKey";
-
-    final response = await http.get(Uri.parse(url));
-    final data = json.decode(response.body);
-
-    final location = data['result']['geometry']['location'];
-
-    return LatLng(location['lat'], location['lng']);
   }
 
   @override
@@ -162,23 +140,18 @@ class _LocationSearchModalState extends State<LocationSearchModal> {
                     itemCount: _predictions.length,
                     itemBuilder: (context, index) {
                       final p = _predictions[index];
+                      final String mainText = p['text'] ?? "";
+                      final String fullAddress = p['place_name'] ?? "";
 
                       return ListTile(
                         leading: const Icon(Icons.location_on),
-                        title: Text(p['structured_formatting']['main_text'] ?? ""),
-                        subtitle: Text(
-                          p['structured_formatting']['secondary_text'] ?? "",
-                        ),
-                        onTap: () async {
-                          final placeId = p['place_id'];
-                          final mainText = p['structured_formatting']['main_text'] ?? "";
-
-                          final latLng = await _getLatLngFromPlaceId(placeId);
+                        title: Text(mainText),
+                        subtitle: Text(fullAddress),
+                        onTap: () {
+                          final List<dynamic> center = p['center'];
+                          final latLng = LatLng(center[1], center[0]);
 
                           widget.onLocationSelected(mainText, latLng);
-
-                          // refresh session token (important)
-                          _sessionToken = _uuid.v4();
 
                           if (context.mounted) {
                             Navigator.pop(context);
